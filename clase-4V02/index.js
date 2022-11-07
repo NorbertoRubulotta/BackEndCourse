@@ -1,16 +1,18 @@
 
 const fs = require('fs');
 const express = require('express');
+const { routerWeb } = require("./routers/routerWeb.js");
 const { randomUUID } = require('crypto');
-const app = express();
+const { app } = require("./server.js");
+
 app.use('/static', express.static('public'))
+
+// Middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const server = app.listen(8080, () => {
-    console.log(`Server running on PORT ${server.address().port}`)
-})
-server.on("error", error => console.log(`Error en servidor ${error}`))
+
+
 
 class ContainerFile {
     #products
@@ -43,8 +45,14 @@ class ContainerFile {
     async deleteById(id) {
         this.#products = JSON.parse(await fs.promises.readFile(this.#route, 'utf-8'));
         const index = this.#products.indexOf(this.#products.find(products => products.id === id));
-        this.#products.splice(index, 1);
-        await fs.promises.writeFile(this.#route, JSON.stringify(this.#products))
+        if (index === -1) {
+            return index
+        } else {
+            const deleted = this.#products[index]
+            this.#products.splice(index, 1);
+            await fs.promises.writeFile(this.#route, JSON.stringify(this.#products))
+            return deleted
+        }
     }
 
     async deleteAll() {
@@ -58,11 +66,17 @@ class ContainerFile {
             return index
         } else {
             this.#products[index] = body;
-            console.log(this.#products[index]);
             await fs.promises.writeFile(this.#route, JSON.stringify(this.#products))
         }
     }
 }
+
+/* ===================== PRODUCTOS PARA CARGAR =========================================
+
+{"title": "Escuadra", "price": "123.45", "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png"}
+{"title": "Calculadora", "price": "234.56", "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png"}
+{"title": "Globo Terráqueo", "price": "345.67", "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png"}
+*/
 
 
 
@@ -71,26 +85,15 @@ async function main() {
     const routeFile = './products.txt';
     const allProducts = new ContainerFile(routeFile);
     await fs.promises.writeFile(routeFile, '[]');
-
-    /* await allProducts.save({ id: "1", title: "Escuadra", price: "123.45", thumbnail: "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png" });
-    await allProducts.save({ id: "2", title: "Calculadora", price: "234.56", thumbnail: "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png" });
-    await allProducts.save({ id: "3", title: "Globo Terráqueo", price: "345.67", thumbnail: "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png" });
- */
     const products = await allProducts.getAll();
 
 
-    // end points //
-    app.get('/', (req, res) => {
-        res.send('<h1>Servidor desafío 4<h1/>')
-    })
-
-
     //-------------------CONTROLADORES--------------//
+
     async function controllerGetProducts(req, res) {
         const products = await allProducts.getAll();
-        res.json(products)
+        res.json(products);
     } //funciona//
-
 
 
     async function controllerPostProducts({ body }, res) {
@@ -98,42 +101,63 @@ async function main() {
         newProduct.id = randomUUID();
         await allProducts.save(newProduct);
         res.status(201);
-        res.json(newProduct)
-    }  //funciona//
+        res.json(newProduct);
+    } //funciona//
+
 
     async function controllerGetProductsById({ params: { id } }, res) {
         const buscado = await allProducts.getById(id);
-        res.json(buscado)
-    } //funciona//
-
-    async function controllerPutProductbyId({ body, params: { id } }, res) {
-        /* const searchedIndex =  */await allProducts.getIndexById(id, body);
-
-        /* console.log(searchedIndex);
-        if (!searchedIndex) {
+        if (buscado === null) {
             res.status(404);
             res.json({ mensaje: `Product with ID:(${id}) not found` });
         } else {
-        } */
-        res.json(body);
-    }//funciona//
+            res.json(buscado);
+        }
+
+    } //funciona//
+
+
+    async function controllerPutProductbyId({ body, params: { id } }, res) {
+        const searchedIndex = await allProducts.getIndexById(id, body);
+
+        if (searchedIndex === -1) {
+            res.status(404);
+            res.json({ mensaje: `Product with ID:(${id}) not found` });
+        } else {
+            res.json(body);
+        }
+    } //funciona//
+
 
     async function controllerDeleteProductByID({ params: { id } }, res) {
         const deleted = await allProducts.deleteById(id);
-        res.json(deleted)
+        if (deleted === -1) {
+            res.status(404);
+            res.json({ message: `Product with ID:(${id}) not found` });
+        } else {
+            res.json(deleted);
+        }
     } //funciona//
 
 
 
-    // api rest
-    app.get('/api/products', controllerGetProducts);
-    app.post('/api/products', controllerPostProducts);
 
-    app.get('/api/products/:id', controllerGetProductsById);
-    app.put('/api/products/:id', controllerPutProductbyId);
-    app.delete('/api/products/:id', controllerDeleteProductByID);
+
+    const routerApi = express.Router();
+    // api rest
+    routerApi.get('/', controllerGetProducts);
+    routerApi.post('/', controllerPostProducts);
+    routerApi.get('/:id', controllerGetProductsById);
+    routerApi.put('/:id', controllerPutProductbyId);
+    routerApi.delete('/:id', controllerDeleteProductByID);
+
+    app.use('/', routerWeb)
+    app.use('/api/products', routerApi)
 
     return products
 }
 
 main()
+
+
+

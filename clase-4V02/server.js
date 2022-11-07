@@ -1,11 +1,11 @@
 const express = require('express');
 
-function controllerGetRoot(req, res) {
-    res.send('todo bien')
-
-}
+// Server
 const app = express();
 
-app.get('/', controllerGetRoot)
+const server = app.listen(8080, () => {
+    console.log(`Server running on PORT ${server.address().port}`);
+});
+server.on("error", error => console.log(`Error en servidor ${error}`));
 
-const server = app.listen(8080)
+exports.app = app;
