@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="main.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="container mt-3">
+        <div class="jumbotron">
+            <h1 style="color:blue;">Agregar Producto</h1>
+            <br>
+
+            <form onsubmit="return addProduct(this)">
+
+                <div class="form-group">
+                    <label for="title"><b>Title</b></label>
+                    <input class="form-control" id="title" type="text" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="price"><b>Price</b></label>
+                    <input class="form-control" id="price" type="text" name="price" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="thumbnail"><b>Thumbnail</b></label>
+                    <input class="form-control" id="thumbnail" type="text" name="thumbnail" required>
+                </div>
+
+
+                <input type="submit" value="Register" class="btn btn-success mt-3 mb-5">
+            </form>
+
+        </div>
+    </div>
+
+    <h2 style="color:crimson;">Lista de Productos</h2>
+
+
+    <div class="table-responsive">
+
+        <table id="productsRender" class="table table-dark">
+
+        </table>
+
+
+    </div>
+
+
+    <form onsubmit="return addMessage(this)">
+        <input type="email" id="username" placeholder="Email" require>
+        <input type="text" id="texto" placeholder="Mensaje" require>
+        <input type="submit" value="Enviar">
+    </form>
+    <div id="messages" style="margin-bottom: 4rem ;"></div>
+</body>
+
+</html>
