@@ -65,7 +65,7 @@ class ContainerFile {
         if (index === -1) {
             return index
         } else {
-            this.#products[index] = body;
+            this.#products[index] = { ...body, id };
             await fs.promises.writeFile(this.#route, JSON.stringify(this.#products))
         }
     }
@@ -124,7 +124,8 @@ async function main() {
             res.status(404);
             res.json({ mensaje: `Product with ID:(${id}) not found` });
         } else {
-            res.json(body);
+            const newElement = { ...body, id }
+            res.json(newElement);
         }
     } //funciona//
 
