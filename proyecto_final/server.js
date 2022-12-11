@@ -23,19 +23,24 @@ export function onlyForAdmins(req, res, next) {
     if (isAdmin) {
         next()
     } else {
-        res.sendStatus(403)
+        res.status(403).json({ Error: -1, Description: `ROUTE '${req.originalUrl}', METHOD '${req.method}' NOT AUTHORIZED` })
     }
 }
 
 app.post('/login', (req, res) => {
     isAdmin = true
-    res.sendStatus(200)
+    res.status(200).json({ Message: "Login Successful" })
 })
 
 app.post('/logout', (req, res) => {
     isAdmin = false
-    res.sendStatus(200)
+    res.status(200).json({ Message: "Logout Successful" })
 })
+
+app.all('*', (req, res) => {
+    res.status(404).json({ Error: -2, Description: `ROUTE '${req.originalUrl}', METHOD '${req.method}' NOT FOUND ` })
+})
+
 
 /* ===================== PRODUCTOS PARA CARGAR =========================================
 

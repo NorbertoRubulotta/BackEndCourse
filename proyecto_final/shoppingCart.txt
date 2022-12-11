@@ -1,1 +1,21 @@
-[{"products":[{"title":"Calculadora","price":"234.56","thumbnail":"https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png","id":"ae03d6ac-197c-4576-8bf7-7f0b3f6afc67"},{"title":"Globo Terráqueo","price":"345.67","thumbnail":"https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png","id":"df1bda97-8018-4d36-bbfa-215a4997a1bc"}],"id":"d9a8a14b-14f5-4b60-9b7e-7bbc446a9244"}]
+[
+  {
+    "products": [
+      {
+        "title": "Calculadora",
+        "price": "234.56",
+        "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
+        "id": "3e0b503a-30fd-4b02-b8ae-e2a05079d803"
+      }
+    ],
+    "id": "87ea169d-e6c9-43ee-9e07-8fabd3793425"
+  },
+  {
+    "products": [],
+    "id": "f9305db3-f215-45ac-8faf-b64c14573c13"
+  },
+  {
+    "products": [],
+    "id": "a986a109-0686-4f9c-a0fa-ccb787adae34"
+  }
+]

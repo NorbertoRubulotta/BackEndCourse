@@ -9,15 +9,18 @@ export default class ContainerFile {
             this.#route = route;
     }
 
-    async save(element) {
-        this.#elements.push(element)
-        await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements))
-    }
-
     async getAll() {
         this.#elements = JSON.parse(await fs.promises.readFile(this.#route, 'utf-8'))
         return this.#elements
     }
+
+    async save(element) {
+        const allElements = JSON.parse(await fs.promises.readFile(this.#route, 'utf-8'))
+        allElements.push(element)
+        await fs.promises.writeFile(this.#route, JSON.stringify(allElements, null, 2))
+    }
+
+
 
 
     async getById(id) {
@@ -36,13 +39,13 @@ export default class ContainerFile {
         } else {
             const deleted = this.#elements[index]
             this.#elements.splice(index, 1);
-            await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements))
+            await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements, null, 2))
             return deleted
         }
     }
     async deleteAll() {
         this.#elements = [];
-        await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements))
+        await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements, null, 2))
     }
 
     async updateById(id, body) {
@@ -51,8 +54,9 @@ export default class ContainerFile {
         if (index === -1) {
             return index
         } else {
+            body.id = id;
             this.#elements[index] = body;
-            await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements))
+            await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements, null, 2))
         }
     }
     async addToCart(id, product) {
@@ -62,7 +66,7 @@ export default class ContainerFile {
             return index
         } else {
             this.#elements[index].products.push(product);
-            await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements))
+            await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements, null, 2))
         }
     }
 
@@ -74,7 +78,7 @@ export default class ContainerFile {
             return index
         } else {
             this.#elements[index].products = [];
-            await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements))
+            await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements, null, 2))
         }
     }
     async deleteProductFromCartById(id_cart, id_prod) {
@@ -86,10 +90,10 @@ export default class ContainerFile {
             /* this.#elements[index].products = this.#elements[index].products.filter(products => products.id != id_prod); */
             const index_product = this.#elements[index].products.indexOf(this.#elements[index].products.find(e => e.id === id_prod));
             if (index_product === -1) {
-                return index_product
+                return -2
             } else {
                 const productDeleted = this.#elements[index].products.splice(index_product, 1);
-                await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements))
+                await fs.promises.writeFile(this.#route, JSON.stringify(this.#elements, null, 2))
                 return productDeleted
             }
 
