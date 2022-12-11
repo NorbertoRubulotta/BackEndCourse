@@ -84,7 +84,6 @@ async function main() {
 
     const routeFile = './products.txt';
     const allProducts = new ContainerFile(routeFile);
-    await fs.promises.writeFile(routeFile, '[]');
     const products = await allProducts.getAll();
 
 
