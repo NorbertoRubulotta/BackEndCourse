@@ -1,0 +1,21 @@
+[
+  {
+    "products": [
+      {
+        "title": "Calculadora",
+        "price": "234.56",
+        "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
+        "id": "3e0b503a-30fd-4b02-b8ae-e2a05079d803"
+      }
+    ],
+    "id": "87ea169d-e6c9-43ee-9e07-8fabd3793425"
+  },
+  {
+    "products": [],
+    "id": "f9305db3-f215-45ac-8faf-b64c14573c13"
+  },
+  {
+    "products": [],
+    "id": "a986a109-0686-4f9c-a0fa-ccb787adae34"
+  }
+]
