@@ -9,6 +9,7 @@ export default class ContainerFile {
             this.#route = route;
     }
 
+
     async getAll() {
         this.#elements = JSON.parse(await fs.promises.readFile(this.#route, 'utf-8'))
         return this.#elements

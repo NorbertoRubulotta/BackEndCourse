@@ -1,23 +1,18 @@
-import { randomUUID } from 'crypto'
-import ContainerFile from './container.js'
 
-
-const routeProducts = './products.txt';
-const routeShoppingCart = './shoppingCart.txt';
-
-const allProducts = new ContainerFile(routeProducts);
-const allShoppingCarts = new ContainerFile(routeShoppingCart);
+import { chosenProdsContainer } from "./containers/DataContainer.js";
+import { createCart, deleteProdsInCart, deleteProductInCart, getAllProducts, saveProdsInCart } from './models/cartModel.js';
+import { saveProds } from './models/productsModel.js';
 
 
 
 //-------------------CONTROLADORES--------------//
 
 export async function controllerGetProducts(req, res) {
-    const products = await allProducts.getAll();
+    const products = await chosenProdsContainer.getAll();
     res.json(products);
 }
 export async function controllerGetProductsById({ params: { id } }, res) {
-    const buscado = await allProducts.getById(id);
+    const buscado = await chosenProdsContainer.getById(id);
     if (buscado === null) {
         res.status(404);
         res.json({ error: -1, description: `Product with ID:(${id}) not found` });
@@ -28,15 +23,13 @@ export async function controllerGetProductsById({ params: { id } }, res) {
 
 export async function controllerPostProducts(req, res) {
     const newProduct = req.body;
-    newProduct.id = randomUUID();
-    await allProducts.save(newProduct);
+    const newProductSaved = await saveProds(newProduct);
     res.status(201);
-    res.json(newProduct);
+    res.json(newProductSaved);
 }
 
 export async function controllerPutProductbyId({ body, params: { id } }, res) {
-    const searchedIndex = await allProducts.updateById(id, body);
-
+    const searchedIndex = await chosenProdsContainer.updateById(id, body);
     if (searchedIndex === -1) {
         res.status(404);
         res.json({ error: -1, description: `Product with ID:(${id}) not found` });
@@ -46,46 +39,51 @@ export async function controllerPutProductbyId({ body, params: { id } }, res) {
 }
 
 export async function controllerDeleteProductByID({ params: { id } }, res) {
-    const deleted = await allProducts.deleteById(id);
+    const deleted = await chosenProdsContainer.deleteById(id);
     if (deleted === -1) {
         res.status(404);
         res.json({ error: -1, description: `Product with ID:(${id}) not found` });
     } else {
         res.json(deleted);
     }
-
 }
 
+//----------------CONTROLADORES CART----------------//
+
+
 export async function controllerPostCart(req, res) {
-    const cart = {};
-    cart.products = [];
-    cart.id = randomUUID();
-    await allShoppingCarts.save(cart);
+    const newCart = await createCart();
     res.status(201);
-    res.json({ Message: `New shopping cart created, ID:${cart.id}` });
+    res.json({ Message: `New shopping cart created, ID:${newCart.id}` });
 }
 
 
 export async function controllerPostProductInCart({ body, params: { id_cart } }, res) {
-    const productToCart = await allProducts.getById(body.id);
-    if (productToCart === null) {
+    const productToSave = await saveProdsInCart(body.id, id_cart)
+
+    if (productToSave === -1) {
         res.status(404);
         res.json({ error: -1, description: `Product with ID:${body.id} not found` });
+    } else if (productToSave === -2) {
+        res.status(404);
+        res.json({ error: -2, description: `Cart with ID:${id_cart} not found` });
     } else {
-        const cartExist = await allShoppingCarts.getById(id_cart);
-        if (cartExist === null) {
-            res.status(404);
-            res.json({ error: -1, description: `Cart with ID:${id_cart} not found` });
-        } else {
-            await allShoppingCarts.addToCart(id_cart, productToCart)
-            res.status(201);
-            res.json(productToCart);
-        }
+        res.status(201);
+        res.json(productToSave);
+    }
+}
+export async function controllerGetCartProductsById({ params: { id } }, res) {
+    const productsList = await getAllProducts(id);
+    if (productsList === null) {
+        res.status(404);
+        res.json({ error: -1, description: `Cart with ID:(${id}) not found` });
+    } else {
+        res.status(201).json(productsList.products);
     }
 }
 
 export async function controllerEmptyCart({ params: { id_cart } }, res) {
-    const emptyCart = await allShoppingCarts.emptCartById(id_cart);
+    const emptyCart = await deleteProdsInCart(id_cart);
     if (emptyCart === -1) {
         res.status(404).json({ error: -1, description: `Cart with ID:(${id_cart}) not found` });
     } else {
@@ -93,17 +91,9 @@ export async function controllerEmptyCart({ params: { id_cart } }, res) {
     }
 }
 
-export async function controllerGetCartProductsById({ params: { id } }, res) {
-    const buscado = await allShoppingCarts.getById(id);
-    if (buscado === null) {
-        res.status(404);
-        res.json({ error: -1, description: `Cart with ID:(${id}) not found` });
-    } else {
-        res.status(201).json(buscado.products);
-    }
-}
+
 export async function controllerDeleteCartProductById({ params: { id_cart, id_prod } }, res) {
-    const productDeleted = await allShoppingCarts.deleteProductFromCartById(id_cart, id_prod);
+    const productDeleted = await deleteProductInCart(id_cart, id_prod);
     if (productDeleted === -1) {
         res.status(404);
         res.json({ error: -1, description: `Cart with ID:(${id_cart}) not found` });
