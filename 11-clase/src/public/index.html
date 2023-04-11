@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    </script>
+    <title> Mocks y normalización</title>
+</head>
+
+<body>
+    <main>
+
+        <button id="showProducts">Mostrar productos</button>
+        <h2 style="color:crimson;">Lista de Productos</h2>
+
+
+        <div class="table-responsive">
+
+            <table id="productsRender" class="table table-dark">
+
+            </table>
+
+
+        </div>
+
+        <form id='formNewMessage'>
+            <input type="email" id="useremail" placeholder="Email" require>
+            <input type="text" id="userName" placeholder="Name" require>
+            <input type="text" id="userLastName" placeholder="Last Name" require>
+            <input type="number" id="age" placeholder="Age" require>
+            <input type="text" id="nickName" placeholder="Nick Name" require>
+            <input type="text" id="avatar" placeholder="Avatar" require>
+            <input type="text" id="message" placeholder="message" require>
+            <input type="submit" value="Send">
+        </form>
+        <div id="messages" style="margin-bottom: 4rem ;"></div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
+    <script src="./js/index.js" type="module" async></script>
+</body>
+
+</html>

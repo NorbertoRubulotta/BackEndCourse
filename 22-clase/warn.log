@@ -1,0 +1,2 @@
+{"level":40,"time":1680448773158,"pid":332,"hostname":"LAPTOP-I4ELM5HJ","Route":"/api/users","Method":"GET","Error":"Route not found"}
+{"level":40,"time":1680711039888,"pid":22408,"hostname":"LAPTOP-I4ELM5HJ","Route":"/graphql","Method":"POST","Error":"Route not found"}

@@ -1,0 +1,57 @@
+query { 
+  controllerGraphqlGetProducts {
+    id
+    name
+    description
+    price
+    image
+  }
+}
+
+query { 
+  controllerGraphqlGetProductsById(id: "0bc223c0-82f7-4e81-a002-a33514c0385c") {
+    id
+    name
+    description
+    price
+    image
+  }
+}
+
+mutation {
+  controllerGraphqlPostProducts({
+      name: "Papa Noel Post Graphql"
+      description: "El mejor Papa Noel"
+      price: 1600
+      image: "{{IMAGE_URL_4}}"
+    }
+   
+  ) {
+    id
+    name
+    description
+    price
+    image
+  }
+}
+
+mutation {
+  controllerGraphqlPutProductbyId(id:"0bc223c0-82f7-4e81-a002-a33514c0385c",{
+      name: "Papa Noel PUT  Graphql"
+      description: "El Noel"
+      price: 1600
+    }
+  ) {
+    id
+    name
+    description
+    price
+    image
+  }
+}
+
+mutation {
+  controllerGraphqlDeleteProductByID(id: "e4eea668-727f-4111-bcd9-b54f5692037e") {
+    deletedCount
+}
+}
