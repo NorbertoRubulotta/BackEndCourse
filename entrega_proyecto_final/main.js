@@ -19,7 +19,6 @@ if (info.MODE === 'CLUSTER' && cluster.isPrimary) {
         console.log(`Worker ${Worker.process.pid} died`);
         cluster.fork()
     }
-
     )
 } else {
     await createServer(info.p)

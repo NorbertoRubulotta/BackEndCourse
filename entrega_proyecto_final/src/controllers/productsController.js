@@ -1,13 +1,14 @@
 import { productService } from '../negocio/services/product.service/index.js';
 import { logger } from '../persistence/loggers/logger.js';
+import { validateProduct } from '../validators/product.validator.js';
 
 export async function controllerGetProducts(req, res) {
     try {
         const products = await productService.getAll();
         res.status(200).json(products);
     } catch (error) {
-        logger.error(error.message)
-        res.json({ error: `Error finding products`, description: error.message });
+        logger.error(error)
+        res.json({ error: `Error finding products`, description: error });
     }
 }
 
@@ -21,20 +22,21 @@ export async function controllerGetProductsById({ params: { id } }, res) {
             res.status(200).json(buscado);
         }
     } catch (error) {
-        logger.error(error.message)
-        res.json({ error: `Error finding product`, description: error.message });
+        logger.error(error)
+        res.json({ error: `Error finding product`, description: error });
     }
 }
 
 export async function controllerPostProducts(req, res) {
     try {
+        await validateProduct(req.body)
         const newProduct = req.body;
         const newProductSaved = await productService.save(newProduct);
         res.status(200);
         res.json(newProductSaved);
-    } catch {
-        logger.error(error.message)
-        res.json({ error: `Error saving products`, description: error.message });
+    } catch (error) {
+        logger.error(error)
+        res.json({ error: `Error saving products`, description: error });
     }
 }
 
@@ -47,9 +49,9 @@ export async function controllerPutProductbyId({ body, params: { id } }, res) {
         } else {
             res.json(searched);
         }
-    } catch {
-        logger.error(error.message)
-        res.json({ error: `Error editing product`, description: error.message });
+    } catch (error) {
+        logger.error(error)
+        res.json({ error: `Error editing product`, description: error });
     }
 }
 
@@ -63,8 +65,8 @@ export async function controllerDeleteProductByID({ params: { id } }, res) {
             res.status(200).json(deleted);
         }
     }
-    catch {
-        logger.error(error.message)
-        res.json({ error: `Error deleting product`, description: error.message });
+    catch (error) {
+        logger.error(error)
+        res.json({ error: `Error deleting product`, description: error });
     }
 }

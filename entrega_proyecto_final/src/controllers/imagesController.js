@@ -5,10 +5,11 @@ export async function controllerPostImage(req, res, next) {
         const file = req.file
         if (!file) {
             res.status(400).json({ error: "You need to add a file" })
+        } else {
+            res.status(200).json({ imgURL: file.path })
         }
-        res.json({ imgURL: file.path })
     } catch (error) {
-        logger.error(error.message)
-        res.json({ error: `Error uploading image`, description: error.message });
+        logger.error(error)
+        res.json({ error: `Error uploading image`, description: error });
     }
 }

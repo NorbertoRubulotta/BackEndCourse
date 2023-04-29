@@ -18,8 +18,10 @@ export class UsersService {
             lastname,
             image
         }
+
         try {
-            await this.#userRepository.getByEmail(email);
+            const userExist = await this.#userRepository.getByEmail(email);
+            if (userExist) throw new Error("User already exists");
             const password = encryptPassword(newUserInfo.password);
             const idCart = await cartService.createCart()
             const user = new User(newUserInfo);
@@ -28,8 +30,8 @@ export class UsersService {
             await this.#userRepository.save(user.data());
             return user.data();
         } catch (error) {
-            logger.error(error);
-            throw error;
+            logger.error(error.message);
+            throw error.message
         }
     }
 
