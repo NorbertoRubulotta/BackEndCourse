@@ -1,3 +1,4 @@
+import { logger } from "../persistence/loggers/logger.js";
 
 export async function controllerPostImage(req, res, next) {
     try {
@@ -5,8 +6,9 @@ export async function controllerPostImage(req, res, next) {
         if (!file) {
             res.status(400).json({ error: "You need to add a file" })
         }
-        res.json({ imgURL: "localhost:8080/" + file.path })
+        res.json({ imgURL: file.path })
     } catch (error) {
-        next(error);
+        logger.error(error.message)
+        res.json({ error: `Error uploading image`, description: error.message });
     }
 }

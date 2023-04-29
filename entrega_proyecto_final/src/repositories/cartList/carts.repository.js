@@ -1,3 +1,4 @@
+import { logger } from "../../persistence/loggers/logger.js";
 
 export default class CartList {
     #dao
@@ -8,9 +9,9 @@ export default class CartList {
     async save(cart) {
         try {
             await this.#dao.save(cart);
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
 
     }
@@ -19,8 +20,9 @@ export default class CartList {
         try {
             const dto = await this.#dao.getById(idProd)
             return dto
-        } catch (err) {
-            throw loggerFileError.error({ Error: 'Error finding product' });
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -28,9 +30,9 @@ export default class CartList {
         try {
             const updated = await this.#dao.updateById(idProd, dataProd);
             return updated
-        } catch (err) {
-            logger.error(err);
-            throw err;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
     async deleteById(idProd) {
@@ -38,8 +40,9 @@ export default class CartList {
             const deleted = await this.#dao.deleteById(idProd)
             return deleted
         }
-        catch (err) {
-            throw loggerFileError.error({ Error: 'Error deleting products' });
+        catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 

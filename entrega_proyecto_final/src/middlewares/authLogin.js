@@ -1,3 +1,4 @@
+import { logger } from "../persistence/loggers/logger.js";
 import { verifyToken } from "../utils/tokenManagger.js";
 
 export default function valAuthenticate(req, res, next) {
@@ -7,8 +8,8 @@ export default function valAuthenticate(req, res, next) {
         const verified = verifyToken(token);
         req.user = verified;
         next();
-    } catch (e) {
-        logger.error(e);
+    } catch (error) {
+        logger.error(error);
     }
 }
 

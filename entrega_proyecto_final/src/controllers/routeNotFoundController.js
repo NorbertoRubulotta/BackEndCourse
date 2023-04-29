@@ -1,4 +1,5 @@
-import { logger } from '../persistence/loggers/logger.js'
+import { logger } from "../persistence/loggers/logger.js";
+
 
 export function controllerRouteNotFound(req, res) {
     logger.info('Wrong route: ', req.path, 'Method: ', req.method);

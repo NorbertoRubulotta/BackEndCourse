@@ -1,4 +1,5 @@
 import { User } from "../../../models/userModel.js";
+import { logger } from "../../../persistence/loggers/logger.js";
 import { encryptPassword } from "../../../utils/passEncrypter.js";
 import { cartService } from "../cart.service/index.js";
 
@@ -26,9 +27,9 @@ export class UsersService {
             user.idCart = idCart;
             await this.#userRepository.save(user.data());
             return user.data();
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -36,9 +37,9 @@ export class UsersService {
         try {
             const user = await this.#userRepository.getById(id);
             return user.data();
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 }

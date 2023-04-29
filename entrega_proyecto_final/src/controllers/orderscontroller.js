@@ -1,4 +1,5 @@
 import orderService from '../negocio/services/order.service/index.js';
+import { logger } from '../persistence/loggers/logger.js';
 
 export async function controllerPostOrder(req, res, next) {
     try {
@@ -8,9 +9,9 @@ export async function controllerPostOrder(req, res, next) {
         } else {
             res.status(201).json(order);
         }
-    } catch (e) {
-        logger.error(e);
-        next(e);
+    } catch (error) {
+        logger.error(error.message)
+        res.json({ error: `Error creating order`, description: error.message });
     }
 }
 
@@ -22,8 +23,8 @@ export async function controllerGetAllOrders(req, res, next) {
         } else {
             res.status(200).json(orders);
         }
-    } catch (e) {
-        logger.error(e);
-        next(e);
+    } catch (error) {
+        logger.error(error.message)
+        res.json({ error: `Error finding orders`, description: error.message });
     }
 }

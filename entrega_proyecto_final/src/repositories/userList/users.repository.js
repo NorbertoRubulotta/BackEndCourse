@@ -1,5 +1,5 @@
 import { User } from "../../models/userModel.js";
-
+import { logger } from "../../persistence/loggers/logger.js";
 export default class UserList {
     #dao
     constructor(dao) {
@@ -9,9 +9,9 @@ export default class UserList {
     async save(user) {
         try {
             await this.#dao.save(user);
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -19,8 +19,9 @@ export default class UserList {
         try {
             const dto = await this.#dao.getById(id)
             return new User(dto)
-        } catch (err) {
-            throw logger.error({ Error: 'Error finding user' });
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -30,7 +31,8 @@ export default class UserList {
             const findUser = await this.#dao.getByEmail(email)
             return findUser;
         } catch (error) {
-            throw new Error("User not found. Error: " + error);
+            logger.error(error);
+            throw error;
         }
     }
 

@@ -1,4 +1,5 @@
 import { Product } from "../../../models/productsModel.js";
+import { logger } from "../../../persistence/loggers/logger.js";
 
 
 export class ProductService {
@@ -18,9 +19,9 @@ export class ProductService {
             const product = new Product(object);
             await this.#productRepository.save(product);
             return product.data();
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -28,18 +29,18 @@ export class ProductService {
         try {
             const product = await this.#productRepository.getById(id);
             return product.data();
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
     async getAll() {
         try {
             return await this.#productRepository.getAll();
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -48,18 +49,18 @@ export class ProductService {
         try {
             const product = await this.#productRepository.updateById(id, data);
             return product.data();
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
     async deleteById(id) {
         try {
             return await this.#productRepository.deleteById(id);
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 }

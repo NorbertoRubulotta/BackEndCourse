@@ -1,5 +1,6 @@
 import { mailSender } from "../../../email/email.js";
 import { Order } from "../../../models/orderModel.js";
+import { logger } from "../../../persistence/loggers/logger.js";
 
 export class OrderService {
     #orderRepository;
@@ -35,9 +36,9 @@ export class OrderService {
             await this.#cartRepository.updateById(user.idCart, cart);
 
             return order.data();
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -46,9 +47,9 @@ export class OrderService {
             const orders = await this.#orderRepository.getAll(id);
             const userOrders = orders.filter(order => order.idClient === id);
             return userOrders;
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 }

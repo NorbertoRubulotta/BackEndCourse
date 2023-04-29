@@ -1,4 +1,5 @@
 import { productService } from '../negocio/services/product.service/index.js';
+import { logger } from '../persistence/loggers/logger.js';
 
 export async function controllerGetProducts(req, res) {
     try {
@@ -6,7 +7,7 @@ export async function controllerGetProducts(req, res) {
         res.status(200).json(products);
     } catch (error) {
         logger.error(error.message)
-        res.json({ error: -1, description: `Error finding products` });
+        res.json({ error: `Error finding products`, description: error.message });
     }
 }
 
@@ -21,7 +22,7 @@ export async function controllerGetProductsById({ params: { id } }, res) {
         }
     } catch (error) {
         logger.error(error.message)
-        res.json({ error: -1, description: `Error finding products` });
+        res.json({ error: `Error finding product`, description: error.message });
     }
 }
 
@@ -32,8 +33,8 @@ export async function controllerPostProducts(req, res) {
         res.status(200);
         res.json(newProductSaved);
     } catch {
-        logger.error(error.message);
-        res.json({ error: -1, description: `Error saving products` });
+        logger.error(error.message)
+        res.json({ error: `Error saving products`, description: error.message });
     }
 }
 
@@ -42,13 +43,13 @@ export async function controllerPutProductbyId({ body, params: { id } }, res) {
         const searched = await productService.updateById(id, body);
         if (searched === -1) {
             res.status(404);
-            res.json({ error: -1, description: `Product with ID:(${id}) not found` });
+            res.json({ description: `Product with ID:(${id}) not found` });
         } else {
             res.json(searched);
         }
     } catch {
-        logger.error(error.message);
-        res.json({ error: -1, description: `Error saving products` });
+        logger.error(error.message)
+        res.json({ error: `Error editing product`, description: error.message });
     }
 }
 
@@ -57,13 +58,13 @@ export async function controllerDeleteProductByID({ params: { id } }, res) {
         const deleted = await productService.deleteById(id);
         if (deleted === -1) {
             res.status(404);
-            res.json({ error: -1, description: `Product with ID:(${id}) not found` });
+            res.json({ description: `Product with ID:(${id}) not found` });
         } else {
             res.status(200).json(deleted);
         }
     }
     catch {
-        logger.error(error.message);
-        res.json({ error: -1, description: `Error deleting products` });
+        logger.error(error.message)
+        res.json({ error: `Error deleting product`, description: error.message });
     }
 }

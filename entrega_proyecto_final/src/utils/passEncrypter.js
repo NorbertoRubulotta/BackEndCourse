@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import { logger } from '../persistence/loggers/logger.js';
-
 import userList from '../repositories/userList/index.js';
 
 
@@ -15,8 +14,8 @@ export async function validatePassword(body) {
         if (!answer) throw new Error('Invalid password');
 
         return user;
-    } catch (err) {
-        logger.error(err);
-        throw new Error("error al validar");
+    } catch (error) {
+        logger.error(error);
+        throw new Error({ error: 'Error validating password', message: error.message });
     }
 }

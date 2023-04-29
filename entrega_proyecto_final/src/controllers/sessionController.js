@@ -1,4 +1,5 @@
 import { sessionService } from "../negocio/services/session.service/index.js";
+import { logger } from "../persistence/loggers/logger.js";
 
 export async function controllerPostSession(req, res, next) {
     try {

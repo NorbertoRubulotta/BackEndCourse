@@ -9,17 +9,23 @@ export default class ProductList {
     }
 
     async save(prod) {
-        const dto = new ProductDto(prod.data())
-        const dtoGuardado = await this.#dao.save(dto);
-        return new Product(dtoGuardado)
+        try {
+            const dto = new ProductDto(prod.data())
+            const dtoGuardado = await this.#dao.save(dto);
+            return new Product(dtoGuardado)
+        } catch (error) {
+            logger.error(error);
+            throw error;
+        }
     }
 
     async getAll() {
         try {
             const dtos = await this.#dao.getAll()
             return dtos
-        } catch (err) {
-            throw logger.error({ Error: 'Error finding products' });
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -28,8 +34,9 @@ export default class ProductList {
         try {
             const dto = await this.#dao.getById(idProd)
             return new Product(dto)
-        } catch (err) {
-            throw loggerFileError.error({ Error: 'Error finding product' });
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -37,9 +44,9 @@ export default class ProductList {
         try {
             const updated = await this.#dao.updateById(idProd, dataProd);
             return new Product(updated)
-        } catch (err) {
-            logger.error(err);
-            throw err;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -48,8 +55,9 @@ export default class ProductList {
             const deleted = await this.#dao.deleteById(idProd)
             return deleted
         }
-        catch (err) {
-            throw loggerFileError.error({ Error: 'Error deleting products' });
+        catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 

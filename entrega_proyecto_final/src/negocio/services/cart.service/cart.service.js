@@ -1,4 +1,5 @@
 import { Cart } from "../../../models/cartModel.js";
+import { logger } from "../../../persistence/loggers/logger.js";
 
 export class CartService {
     #productsRepository;
@@ -13,9 +14,9 @@ export class CartService {
             const cart = new Cart();
             await this.#cartRepository.save(cart.data());
             return cart.id;
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -38,9 +39,9 @@ export class CartService {
                 await this.#cartRepository.updateById(idCart, cart)
             }
             return product.data();
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -49,9 +50,9 @@ export class CartService {
             const cart = await this.#cartRepository.getById(idCart);
 
             return cart
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 
@@ -72,9 +73,9 @@ export class CartService {
             } else return false;
             return cart;
 
-        } catch (e) {
-            logger.error(e);
-            throw e;
+        } catch (error) {
+            logger.error(error);
+            throw error;
         }
     }
 }
